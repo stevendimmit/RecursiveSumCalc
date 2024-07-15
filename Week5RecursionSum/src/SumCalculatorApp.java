@@ -67,7 +67,8 @@ public class SumCalculatorApp extends JFrame {
         }
     	//recursive case
         try {
-            double num = Double.parseDouble(numberFields[index].getText());
+            String input = numberFields[index].getText().trim();
+            double num = Double.parseDouble(input);
             calculateSumRecursive(index + 1, sum + num);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(SumCalculatorApp.this,
