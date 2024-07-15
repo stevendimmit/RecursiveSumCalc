@@ -40,6 +40,9 @@ public class SumCalculatorApp extends JFrame {
             }
         }
         panel.add(equalsLabel);
+       
+        resultField.setHorizontalAlignment(JTextField.LEFT);
+        
         panel.add(resultField);
 
         // Create Calculate button
