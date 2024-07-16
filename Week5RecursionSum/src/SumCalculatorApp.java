@@ -13,39 +13,20 @@ public class SumCalculatorApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 150);
 
-       
-        numberFields = new JTextField[5];
-        for (int i = 0; i < 5; i++) {
-            numberFields[i] = new JTextField(5);
-        }
-        resultField = new JTextField(10);
-        resultField.setEditable(false); 
-
-        
-        JLabel[] plusLabels = new JLabel[4];
-        for (int i = 0; i < 4; i++) {
-            plusLabels[i] = new JLabel("+");
-        }
-        JLabel equalsLabel = new JLabel("=");
-
-       
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
-        // Add components to the panel
-        for (int i = 0; i < 5; i++) {
-            panel.add(numberFields[i]);
-            if (i < 4) {
-                panel.add(plusLabels[i]);
-            }
-        }
+        numberFields = new JTextField[5];
+        resultField = new JTextField(10);
+        resultField.setEditable(false);
+
+        createComponents(panel, 0); // Create number fields and plus labels recursively
+
+        JLabel equalsLabel = new JLabel("=");
         panel.add(equalsLabel);
-       
-        resultField.setHorizontalAlignment(JTextField.LEFT);
-        
+
         panel.add(resultField);
 
-        // Create Calculate button
         JButton calculateButton = new JButton("Calculate");
         calculateButton.addActionListener(new ActionListener() {
             @Override
@@ -55,25 +36,39 @@ public class SumCalculatorApp extends JFrame {
         });
         panel.add(calculateButton);
 
-   
         add(panel);
-
-        setVisible(true); 
+        setVisible(true);
     }
 
-    // Recursive method 
-    private void calculateSumRecursive(int index, double sum) {
-        //base case
-    	if (index == 5) {
-            resultField.setText(String.valueOf(sum));
-            return;
+    // Recursive method to create number fields and plus labels
+    private void createComponents(JPanel panel, int index) {
+        if (index >= 5) {
+            return; // Base case: stop recursion when all fields are created
         }
-    	//recursive case
+
+        numberFields[index] = new JTextField(5);
+        panel.add(numberFields[index]);
+
+        if (index < 4) { // Add plus label after each text field except the last one
+            JLabel plusLabel = new JLabel("+");
+            panel.add(plusLabel);
+        }
+
+        createComponents(panel, index + 1); // Recursively create next component
+    }
+
+    // Recursive method to calculate sum
+    private void calculateSumRecursive(int index, double sum) {
+        if (index == 5) {
+            resultField.setText(String.valueOf(sum));
+            return; // Base case: stop recursion when all numbers are summed
+        }
+
         try {
             String input = numberFields[index].getText().trim();
             double num = Double.parseDouble(input);
-            calculateSumRecursive(index + 1, sum + num);
-        } catch (Exception ex) {
+            calculateSumRecursive(index + 1, sum + num); // Recursively sum next number
+        } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(SumCalculatorApp.this,
                     "Please enter valid numbers in all fields.",
                     "Input Error", JOptionPane.ERROR_MESSAGE);
